@@ -122,3 +122,38 @@ export const getAllTask = async (req, res) => {
     });
   }
 };
+
+/**********************************************************
+ * @UPDATE_TASK_STATUS
+ * @route PUT /api/tasks/:id/status
+ * @description Controller used for updating task status by ID
+ * @returns Updated Task Object if task is found and status is updated
+ **********************************************************/
+export const updateTaskStatus = async (req, res) => {
+  try {
+    const { id: taskId } = req.params;
+    const { status } = req.body;
+
+    const updatedTask = await Task.findByIdAndUpdate(
+      taskId,
+      { status },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedTask) {
+      throw new Error("Task not found");
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Task status updated successfully",
+      updatedTask,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
