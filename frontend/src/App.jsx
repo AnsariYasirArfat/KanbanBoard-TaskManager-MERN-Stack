@@ -7,7 +7,9 @@ function App() {
   const connectBackend = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/");
+      const response = await fetch(
+        "https://taskmanagement-webapp.onrender.com/"
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
