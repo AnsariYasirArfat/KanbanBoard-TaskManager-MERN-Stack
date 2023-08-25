@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import config from "./config/index.js";
+import routes from "./routes/index.js";
 
 const app = express();
 
@@ -16,9 +17,10 @@ app.use(
   })
 );
 
-app.get("/", (req, res) => {
+app.use("/api", routes);
+
+app.get("/", (_req, res) => {
   res.send("Hello From Backend Server!");
-  console.log("Cookies: ", req.cookies);
 });
 
 app.all("*", (_req, res) => {
