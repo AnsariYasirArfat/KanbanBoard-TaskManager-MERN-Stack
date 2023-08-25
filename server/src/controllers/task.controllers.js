@@ -16,6 +16,10 @@ export const createTask = async (req, res) => {
       title,
       description,
     });
+    if (!task) {
+      throw new Error("Failed to create task in database");
+    }
+
     res.status(201).json({
       success: true,
       message: "Task created successfully",
@@ -50,6 +54,9 @@ export const updateTask = async (req, res) => {
       { new: true, runValidators: true }
     );
 
+    if (!updateTask) {
+      throw new Error("Failed to update task in database");
+    }
     res.status(200).json({
       success: true,
       message: "Task updated successfully",
@@ -73,14 +80,15 @@ export const updateTask = async (req, res) => {
 export const deleteTask = async (req, res) => {
   try {
     const { id: taskId } = req.params;
-    const taskToDelete = await Task.findOneAndDelete(taskId);
+    const taskToDelete = await Task.findByIdAndDelete(taskId);
     if (!taskToDelete) {
       throw new Error("Task not found to delete");
+    } else {
+      res.status(200).json({
+        success: true,
+        message: "Task deleted successfully",
+      });
     }
-    res.status(200).json({
-      success: true,
-      message: "Task deleted successfully",
-    });
   } catch (error) {
     console.error(error);
     res.status(400).json({
