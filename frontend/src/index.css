@@ -1,0 +1,396 @@
+/* Header component style */
+
+.navbar {
+  background-color: #051a26;
+}
+
+.title {
+  color: #4f9693;
+  font-size: 2.5rem;
+  font-weight: 900;
+}
+
+.searchLogo:hover {
+  scale: 1.2;
+}
+
+.searchForm {
+  background-color: #082837;
+  max-width: 400px;
+  border-radius: 5px;
+  padding: 10px 10px;
+}
+
+.inputBox {
+  max-width: 300px;
+  background-color: #082837e5;
+  border: none;
+  color: #c8f1eb;
+}
+.inputBox:focus {
+  border-color: inherit;
+  background-color: #c8f1eb;
+  color: #082837;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  box-shadow: 2px 2px 20px #e9f08e;
+  font-weight: 500;
+}
+
+.inputBox:focus::placeholder {
+  color: #447ca4;
+  font-weight: 600;
+}
+.inputBox::placeholder {
+  color: #447ca4;
+  font-weight: 500;
+}
+
+/* AddTodo component style */
+.addTask {
+  color: #e9f08e;
+  font-size: 1.8rem;
+}
+
+.addTaskForm {
+  background-color: #082837;
+  max-width: 600px;
+  padding: 10px 30px;
+  border-radius: 5px;
+
+  box-shadow: 2px 2px 20px #e9f08e;
+}
+
+.form-floating:not(.form-control:disabled)::before {
+  background-color: transparent;
+  color: #c8f1eb;
+}
+label {
+  color: #447ca4;
+  font-weight: 700;
+}
+.inputText {
+  color: #f1c8c8;
+  background-color: #051a26;
+  border: none;
+  font-weight: 600;
+}
+.inputText:focus {
+  font-weight: 500;
+  border: none;
+  background-color: #c8f1eb;
+  color: #082837;
+  box-shadow: none;
+}
+.addTaskButton {
+  border: none;
+  border-radius: 5px;
+  max-width: 500px;
+  width: 120px;
+  height: 40px;
+  color: #082837;
+  font-weight: 700;
+  transition: all 0.7s ease-in-out;
+  background-color: #e9f08e;
+  box-shadow: 1px 1px 20px #e9f08e;
+}
+.addTaskButton:hover {
+  background-color: #c8f1eb;
+  box-shadow: none;
+  width: 130px;
+}
+
+/* App style */
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+body {
+  background-color: #051a26;
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1200px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+/* Change the color of the scrollbar track */
+::-webkit-scrollbar {
+  background-color: #c8f1eb;
+  width: 10px;
+
+  margin-top: 20px;
+}
+
+/* Change the color of the scrollbar thumb (handle) */
+::-webkit-scrollbar-thumb {
+  background-color: #447ca4;
+}
+
+/* Change the color when hovering over the scrollbar */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #e9f08e;
+}
+
+/* Style of Scrollbar For FireFox browser */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #447ca4 #c8f1eb;
+}
+
+/* Todos component style */
+.taskList {
+  color: #e9f08e;
+  font-size: 2.1rem;
+}
+
+.descripStatusBox {
+  border: solid 2px #447ca4;
+  border-radius: 10px;
+}
+.descripStatus {
+  color: #c8f1eb;
+  font-size: 1rem;
+}
+
+.subHeading {
+  color: #447ca4;
+  font-size: 1.5rem;
+}
+.count {
+  color: #c8f1eb;
+}
+.remainingSection {
+  max-height: 680px;
+}
+.completedTasks {
+  max-height: 680px;
+}
+.completedTasks::-webkit-scrollbar,
+.remainingSection::-webkit-scrollbar {
+  display: none;
+}
+
+.completedTasks,
+.remainingSection {
+  scrollbar-width: none; /* for Firefox */
+  -ms-overflow-style: none; /* for Internet Explorer and Edge */
+}
+
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  outline: none;
+  border: none;
+}
+.radio-label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.radio-custom {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #c8f1eb;
+  border-radius: 50%;
+  background-color: transparent;
+}
+
+.radio-custom:before {
+  content: "";
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #e9f08e;
+  transform: scale(0);
+  transition: transform 0.5s ease-in-out;
+}
+
+input[type="radio"]:checked + .radio-custom:before {
+  transform: scale(1);
+}
+
+.emptyTask {
+  padding: 200px 0;
+  min-height: 680px;
+  color: #e9f08e;
+}
+
+/* TodoItem component style */
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+input[type="checkbox"]:checked {
+  accent-color: #e9f08e;
+  width: 15px;
+  height: 15px;
+}
+
+.taskBox {
+  height: 140px;
+  background-color: #082837;
+  border-radius: 20px;
+  box-shadow: none;
+  transition: all 0.5s ease-in-out;
+}
+.taskBoxHeight {
+  height: 280px;
+}
+.checkedTaskBox {
+  opacity: 0.7;
+}
+.checkedTaskBox:hover {
+  opacity: 1;
+}
+.uncheckedTaskBox:hover {
+  box-shadow: 2px 2px 20px #e9f08e;
+  scale: 1.05;
+}
+.blur:hover .taskBox:not(:hover) {
+  opacity: 0.4;
+}
+.saveHeading {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.taskTitle {
+  font-size: 1.1rem;
+  color: #c8f1eb;
+  width: 90%;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.taskDescSection {
+  background-color: #c8f1eb;
+  height: 50%;
+  border-radius: 10px;
+}
+
+.taskDesc {
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  color: #082837;
+  height: 75%;
+  overflow: auto;
+}
+.taskDesc:hover {
+  -webkit-line-clamp: initial;
+}
+
+.editTitleInput {
+  background-color: #082837;
+  border-radius: 10px;
+}
+.editTitleInput input {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #c8f1eb;
+  border: dashed #c8f1eb 2px;
+  width: 100%;
+  background-color: transparent;
+  border-radius: 8px;
+}
+
+.editBox {
+  background-color: #c8f1eb;
+}
+.editDescSection {
+  height: 50%;
+  border-radius: 10px;
+  background-color: #082837;
+}
+.editDescInput {
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  color: #c8f1eb;
+  resize: none;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  border: dashed #c8f1eb 2px;
+  border-radius: 8px;
+}
+.dateTime {
+  color: #447ca4;
+  font-weight: 600;
+  font-size: 0.7rem;
+}
+
+.taskChecked {
+  text-decoration: 2px line-through #051a26;
+  color: #4f9693;
+}
+
+.editDeleteButton:hover {
+  background-color: #447ca4;
+}
+.editDeleteButton {
+  font-weight: 900;
+}
+
+/* Scrollbar styling */
+.taskDesc::-webkit-scrollbar,
+.editDescInput::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.taskDesc::-webkit-scrollbar-track,
+.editDescInput::-webkit-scrollbar-track {
+  background-color: #447ca4;
+  height: 80%;
+}
+
+.taskDesc::-webkit-scrollbar-thumb,
+.editDescInput::-webkit-scrollbar-thumb {
+  background-color: #e9f08e;
+}
+
+/* Style of Scrollbar For FireFox browser */
+.taskDesc,
+.editDescInput {
+  scrollbar-width: thin;
+  scrollbar-color: #e9f08e #447ca4;
+}
+
+/* Footer component style */
+footer {
+  color: #082837;
+  background-color: #c8f1eb;
+  /* background-color: #082837; */
+}
+.footerName {
+  font-size: 1.4rem;
+}
+.copywrite {
+  font-size: 0.9rem;
+}
+.footer-info {
+  font-size: 1rem;
+}
