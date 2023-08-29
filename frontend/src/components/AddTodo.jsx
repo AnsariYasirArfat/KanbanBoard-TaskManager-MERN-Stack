@@ -97,12 +97,8 @@ const AddTodo = ({ addTodo }) => {
               type="submit"
               className={`addTaskButton  d-flex justify-content-evenly align-items-center m-auto
             `}
-              onMouseEnter={mouseEnterButton}
-              onMouseLeave={mouseLeaveButtton}
             >
-              {isHoveredOnButton && (
-                <img src={addTaskImg} alt="search" width={30} className="" />
-              )}
+              <img src={addTaskImg} alt="search" width={30} className="" />
               <span className="">Add Task</span>
             </button>
           </Modal.Footer>

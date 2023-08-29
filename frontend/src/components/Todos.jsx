@@ -65,18 +65,22 @@ const Todos = (props) => {
         {/* Todo tasks Section */}
         <div className="col-xl-4 d-flex flex-column my-4">
           <p className="subHeading fw-bold text-center ">
-            Tasks Todo:
+            To Do:
             <span className="count"> {filteredTodoTasks.length}</span>
           </p>
           <Droppable droppableId={`todo`}>
-            {(provided) => (
+            {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className={`row row-cols-md-2 row-cols-xl-1  overflow-auto remainingSection `}
+                className={`${
+                  snapshot.isDraggingOver ? "dragTaskContainer" : ""
+                } row row-cols-md-2 row-cols-xl-1 overflow-auto tasksContainer `}
               >
                 {filteredTodoTasks.length === 0 ? (
-                  <h5 className="text-center emptyTask">No Todo task here!</h5>
+                  <h5 className="text-center p-auto emptyTask">
+                    No To Do Task Here!
+                  </h5>
                 ) : (
                   <>
                     {filteredTodoTasks.map((todo, index) => {
@@ -103,20 +107,20 @@ const Todos = (props) => {
         {/* Remaining tasks Section  */}
         <div className="col-xl-4 d-flex flex-column my-4">
           <p className="subHeading fw-bold text-center ">
-            Tasks Remaining:
+            Doing:
             <span className="count"> {filteredRemainingTasks.length}</span>
           </p>
           <Droppable droppableId={`remain`}>
-            {(provided) => (
+            {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className={`row row-cols-md-2 row-cols-xl-1  overflow-auto remainingSection `}
+                className={`${
+                  snapshot.isDraggingOver ? "dragTaskContainer" : ""
+                } row row-cols-md-2 row-cols-xl-1  overflow-auto tasksContainer `}
               >
                 {filteredRemainingTasks.length === 0 ? (
-                  <h5 className="text-center emptyTask">
-                    No Remaining task here!
-                  </h5>
+                  <h5 className="text-center emptyTask">No Doing Task Here!</h5>
                 ) : (
                   <>
                     {filteredRemainingTasks.map((todo, index) => {
@@ -141,22 +145,22 @@ const Todos = (props) => {
           </Droppable>
         </div>
         {/* Completed tasks Section */}
-        <div className="col-xl-4 d-flex flex-column my-4">
+        <div className="col-xl-4 d-flex flex-column my-4 ">
           <p className="subHeading fw-bold text-center ">
-            Finished Tasks:
+            Done:
             <span className="count"> {filteredCompletedTasks.length}</span>
           </p>
           <Droppable droppableId={`completed`}>
-            {(provided) => (
+            {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className={`row  row-cols-md-2 row-cols-xl-1  overflow-auto completedTasks`}
+                className={`${
+                  snapshot.isDraggingOver ? "dragTaskContainer" : ""
+                } row row-cols-md-2 row-cols-xl-1 overflow-auto tasksContainer `}
               >
                 {filteredCompletedTasks.length === 0 ? (
-                  <h5 className="text-center emptyTask">
-                    No Completed task here!
-                  </h5>
+                  <h5 className="text-center emptyTask">No Done Task Here!</h5>
                 ) : (
                   <>
                     {filteredCompletedTasks.map((todo, index) => {

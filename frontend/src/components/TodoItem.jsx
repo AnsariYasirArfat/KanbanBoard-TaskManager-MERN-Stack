@@ -52,7 +52,7 @@ const Todoitem = ({
         <div
           onMouseUp={MouseEnterBox}
           onMouseDown={MouseLeaveBox}
-          className="m-4 editBox taskBox taskBoxHeight uncheckedTaskBox "
+          className="m-3 editBox taskBox taskBoxHeight uncheckedTaskBox "
         >
           <div className=" mx-4 my-1 d-flex justify-content-between align-items-center">
             <h5 className="m-0 saveHeading" style={{ color: "#0d6caf" }}>
@@ -74,7 +74,7 @@ const Todoitem = ({
           <div className="p-1 mx-4 mb-3 editTitleInput">
             <input
               maxLength="50"
-              className={`text p-1 mb-0`}
+              className={`text p-1 mb-0 text-capitalize`}
               required
               value={todo.title}
               placeholder="No Title"
@@ -88,7 +88,7 @@ const Todoitem = ({
           </div>
           <div className="editDescSection mx-4 p-1">
             <textarea
-              className={`editDescInput p-1`}
+              className={`editDescInput p-1 text-capitalize`}
               value={todo.desc}
               placeholder="No Description"
               onChange={(e) => {
@@ -108,9 +108,9 @@ const Todoitem = ({
         <div
           onMouseEnter={MouseEnterBox}
           onMouseLeave={MouseLeaveBox}
-          className={`m-4 taskBox d-flex flex-column justify-content-between${
+          className={`m-3 taskBox d-flex flex-column justify-content-between${
             todo.done === true ? " checkedTaskBox " : " uncheckedTaskBox"
-          }  ${DescriptionState && "taskBoxHeight"} `}
+          }  ${DescriptionState && "taskBoxHeight"}  `}
         >
           <div className="d-flex align-items-center p-3 taskTitleSection">
             {todo.status === "DOING" || todo.status === "DONE" ? (
@@ -189,12 +189,14 @@ const Todoitem = ({
   }
   return (
     <Draggable draggableId={todo.sno.toString()} index={index}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <div
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          className="p-0"
+          className={`p-0  text-capitalize  ${
+            snapshot.isDragging ? "dragTaskBox" : ""
+          }`}
         >
           {todoItem}
         </div>
