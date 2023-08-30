@@ -23,69 +23,74 @@ const Todoitem = ({
     HoveredOnBox(false);
   };
 
+  const [editedTodo, setEditedTodo] = useState({
+    title: todo.title,
+    description: todo.description,
+  });
   // Alert after Editting task
-  const onSave = () => {
+  const onSave = (e) => {
+    e.preventDefault();
+    onEdit(editedTodo);
     setEditing(false);
-    toast.info("Task Updated!", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
   };
 
   // For condition Editting Todos
   if (editing) {
     todoItem = (
       <>
-        <div
-          onMouseUp={MouseEnterBox}
-          onMouseDown={MouseLeaveBox}
-          className="m-3 editBox taskBox taskBoxHeight uncheckedTaskBox "
-        >
-          <div className=" mx-4 my-1 d-flex justify-content-between align-items-center">
-            <h5 className="m-0 saveHeading" style={{ color: "#0d6caf" }}>
-              Edit Your Task:
-            </h5>
-            <button
-              onClick={() => onSave()}
-              className="btn btn-sm editDeleteButton my-1"
-            >
-              <img
-                src="https://img.icons8.com/3d-fluency/94/null/save.png"
-                alt="Save"
-                width={30}
-                className="me-1"
+        <form onSubmit={onSave}>
+          <div
+            onMouseUp={MouseEnterBox}
+            onMouseDown={MouseLeaveBox}
+            className="m-3 editBox taskBox taskBoxHeight uncheckedTaskBox "
+          >
+            <div className=" mx-4 my-1 d-flex justify-content-between align-items-center">
+              <h5 className="m-0 saveHeading" style={{ color: "#0d6caf" }}>
+                Edit Your Task:
+              </h5>
+              <button
+                type="submit"
+                className="btn btn-sm editDeleteButton my-1"
+              >
+                <img
+                  src="https://img.icons8.com/3d-fluency/94/null/save.png"
+                  alt="Save"
+                  width={30}
+                  className="me-1"
+                />
+                Save!
+              </button>
+            </div>
+            <div className="p-1 mx-4 mb-3 editTitleInput">
+              <input
+                maxLength="50"
+                className={`text p-1 mb-0 text-capitalize`}
+                required
+                value={editedTodo.title}
+                placeholder="No Title"
+                onChange={(e) => {
+                  setEditedTodo({
+                    ...todo,
+                    title: e.target.value,
+                  });
+                }}
               />
-              Save!
-            </button>
+            </div>
+            <div className="editDescSection mx-4 p-1">
+              <textarea
+                className={`editDescInput p-1 text-capitalize`}
+                value={editedTodo.description}
+                placeholder="No Description"
+                onChange={(e) => {
+                  setEditedTodo({
+                    ...todo,
+                    description: e.target.value,
+                  });
+                }}
+              ></textarea>
+            </div>
           </div>
-          <div className="p-1 mx-4 mb-3 editTitleInput">
-            <input
-              maxLength="50"
-              className={`text p-1 mb-0 text-capitalize`}
-              required
-              value={todo.title}
-              placeholder="No Title"
-              onChange={(e) => {
-                onEdit({
-                  ...todo,
-                  title: e.target.value,
-                });
-              }}
-            />
-          </div>
-          <div className="editDescSection mx-4 p-1">
-            <textarea
-              className={`editDescInput p-1 text-capitalize`}
-              value={todo.description}
-              placeholder="No Description"
-              onChange={(e) => {
-                onEdit({
-                  ...todo,
-                  description: e.target.value,
-                });
-              }}
-            ></textarea>
-          </div>
-        </div>
+        </form>
       </>
     );
   } else {
@@ -168,9 +173,7 @@ const Todoitem = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          className={`p-0  text-capitalize  ${
-            snapshot.isDragging ? "dragTaskBox" : ""
-          }`}
+          className={`p-0  ${snapshot.isDragging ? "dragTaskBox" : ""}`}
         >
           {todoItem}
         </div>

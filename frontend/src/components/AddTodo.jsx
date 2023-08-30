@@ -75,7 +75,7 @@ const AddTodo = ({ addTodo }) => {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className=" mb-3 inputText text-capitalize"
+                className=" mb-3 inputText"
                 placeholder="Todo Title!"
                 style={{ height: "60px", fontSize: "large" }}
               />
@@ -87,7 +87,7 @@ const AddTodo = ({ addTodo }) => {
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
                 placeholder="Description"
-                className="mb-3 inputText text-capitalize"
+                className="mb-3 inputText"
                 style={{ height: "100px" }}
               />
             </FloatingLabel>

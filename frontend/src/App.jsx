@@ -69,39 +69,61 @@ function App() {
   };
 
   // Function for deleting todo
-  const onDelete = (todo) => {
-    setTodoTasks(todoTasks.filter((e) => e !== todo));
-    setDoingTasks(doingTasks.filter((e) => e !== todo));
-    setDoneTasks(doneTasks.filter((e) => e !== todo));
+  const onDelete = async (todo) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8000/api/tasks/${todo._id}`
+      );
+      if (response.data.success) {
+        setTodoTasks(todoTasks.filter((e) => e !== todo));
+        setDoingTasks(doingTasks.filter((e) => e !== todo));
+        setDoneTasks(doneTasks.filter((e) => e !== todo));
 
-    // For Notification Alert
-    toast.error("Task Deleted!", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
+        // For Notification Alert
+        toast.error("Task Deleted!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(`${error.response.data.message}`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
   };
 
   // Function for editing todo
-  function onEdit(editTodo) {
+  const onEdit = async (editTodo) => {
     const updatedTodo = {
       ...editTodo,
-      todoTime: new Intl.DateTimeFormat(navigator.language, {
-        hour: "numeric",
-        minute: "numeric",
-      }).format(new Date()),
-      todoDate: new Intl.DateTimeFormat(navigator.language, {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }).format(new Date()),
     };
+    console.log(editTodo);
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/api/tasks/${editTodo._id}`,
+        updatedTodo
+      );
 
-    setDoingTasks(
-      doingTasks.map((t) => (t._id === editTodo._id ? updatedTodo : t))
-    );
-    setTodoTasks(
-      todoTasks.map((t) => (t._id === editTodo._id ? updatedTodo : t))
-    );
-  }
+      if (response.data.success) {
+        // Update local state
+        setDoingTasks(
+          doingTasks.map((t) => (t._id === editTodo._id ? updatedTodo : t))
+        );
+        setTodoTasks(
+          todoTasks.map((t) => (t._id === editTodo._id ? updatedTodo : t))
+        );
+
+        toast.info("Task Updated!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(`${error.response.data.message}`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
 
   const handleDragEnd = (result) => {
     const { destination, source } = result;
