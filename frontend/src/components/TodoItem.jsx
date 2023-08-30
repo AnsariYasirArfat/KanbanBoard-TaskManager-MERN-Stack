@@ -9,7 +9,6 @@ const Todoitem = ({
   todo,
   onDelete,
   onEdit,
-  onChecked,
   HoveredOnBox,
   DescriptionState,
 }) => {
@@ -30,19 +29,6 @@ const Todoitem = ({
     toast.info("Task Updated!", {
       position: toast.POSITION.TOP_RIGHT,
     });
-  };
-
-  // Alert after completing task
-  const checkedBox = () => {
-    if (todo.done === false) {
-      toast("Task Completed!", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    } else {
-      toast("Task Reassigned!", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    }
   };
 
   // For condition Editting Todos
@@ -89,12 +75,12 @@ const Todoitem = ({
           <div className="editDescSection mx-4 p-1">
             <textarea
               className={`editDescInput p-1 text-capitalize`}
-              value={todo.desc}
+              value={todo.description}
               placeholder="No Description"
               onChange={(e) => {
                 onEdit({
                   ...todo,
-                  desc: e.target.value,
+                  description: e.target.value,
                 });
               }}
             ></textarea>
@@ -109,29 +95,13 @@ const Todoitem = ({
           onMouseEnter={MouseEnterBox}
           onMouseLeave={MouseLeaveBox}
           className={`m-3 taskBox d-flex flex-column justify-content-between${
-            todo.done === true ? " checkedTaskBox " : " uncheckedTaskBox"
+            todo.status === "DONE" ? " doneTaskBox " : " undoneTaskBox"
           }  ${DescriptionState && "taskBoxHeight"}  `}
         >
           <div className="d-flex align-items-center p-3 taskTitleSection">
-            {todo.status === "DOING" || todo.status === "DONE" ? (
-              <input
-                className="me-3"
-                type="checkbox"
-                checked={todo.done}
-                onChange={(e) => {
-                  onChecked({
-                    ...todo,
-                    done: e.target.checked,
-                  });
-                  checkedBox();
-                }}
-              />
-            ) : (
-              ""
-            )}
             <h5
               className={`m-0 taskTitle  ${
-                todo.done === true && "taskChecked"
+                todo.status === "DONE" && "taskChecked"
               } `}
             >
               {todo.title}
@@ -142,11 +112,15 @@ const Todoitem = ({
               className="taskDescSection mx-4 p-2"
               id="example-collapse-text"
             >
-              <p className={`taskDesc  ${todo.done === true && "taskChecked"}`}>
-                {todo.desc}
+              <p
+                className={`taskDesc  ${
+                  todo.status === "DONE" && "taskChecked"
+                }`}
+              >
+                {todo.description}
               </p>
               <small className="dateTime float-end">
-                {todo.todoDate + " at " + todo.todoTime}
+                {new Date(todo.createdAt).toLocaleString()}
               </small>
             </div>
           </Collapse>
@@ -154,12 +128,12 @@ const Todoitem = ({
             {!DescriptionState && (
               <div className="float-end mt-3 me-4">
                 <small className="dateTime">
-                  {todo.todoDate + " at " + todo.todoTime}
+                  {new Date(todo.createdAt).toLocaleString()}
                 </small>
               </div>
             )}
             <div className="float-start ms-4">
-              {todo.done === false && (
+              {(todo.status === "DOING" || todo.status === "TODO") && (
                 <button
                   onClick={() => setEditing(true)}
                   className="btn editDeleteButton btn-sm me-2"
@@ -188,7 +162,7 @@ const Todoitem = ({
     );
   }
   return (
-    <Draggable draggableId={todo.sno.toString()} index={index}>
+    <Draggable draggableId={todo._id.toString()} index={index}>
       {(provided, snapshot) => (
         <div
           {...provided.draggableProps}

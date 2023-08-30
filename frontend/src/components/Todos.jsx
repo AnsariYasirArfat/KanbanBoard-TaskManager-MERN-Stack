@@ -11,19 +11,19 @@ const Todos = (props) => {
   const [open, setOpen] = useState(true);
 
   let filteredTodoTasks = props.todoTasks;
-  let filteredRemainingTasks = props.remainingTasks;
-  let filteredCompletedTasks = props.completedTasks;
+  let filteredDoingTasks = props.doingTasks;
+  let filteredDoneTasks = props.doneTasks;
 
   if (props.filterText) {
     filteredTodoTasks = props.todoTasks.filter(
       (todo) =>
         todo.title.toLowerCase().indexOf(props.filterText.toLowerCase()) !== -1
     );
-    filteredRemainingTasks = props.remainingTasks.filter(
+    filteredDoingTasks = props.doingTasks.filter(
       (todo) =>
         todo.title.toLowerCase().indexOf(props.filterText.toLowerCase()) !== -1
     );
-    filteredCompletedTasks = props.completedTasks.filter(
+    filteredDoneTasks = props.doneTasks.filter(
       (todo) =>
         todo.title.toLowerCase().indexOf(props.filterText.toLowerCase()) !== -1
     );
@@ -88,10 +88,9 @@ const Todos = (props) => {
                         <TodoItem
                           index={index}
                           todo={todo}
-                          key={`todo-${todo.sno}`}
+                          key={`todo-${todo._id}`}
                           onDelete={props.onDelete}
                           onEdit={props.onEdit}
-                          onChecked={props.onChecked}
                           HoveredOnBox={setIsHoveredOnBox}
                           DescriptionState={open}
                         />
@@ -108,7 +107,7 @@ const Todos = (props) => {
         <div className="col-xl-4 d-flex flex-column my-4">
           <p className="subHeading fw-bold text-center ">
             Doing:
-            <span className="count"> {filteredRemainingTasks.length}</span>
+            <span className="count"> {filteredDoingTasks.length}</span>
           </p>
           <Droppable droppableId={`remain`}>
             {(provided, snapshot) => (
@@ -119,19 +118,18 @@ const Todos = (props) => {
                   snapshot.isDraggingOver ? "dragTaskContainer" : ""
                 } row row-cols-md-2 row-cols-xl-1  overflow-auto tasksContainer `}
               >
-                {filteredRemainingTasks.length === 0 ? (
+                {filteredDoingTasks.length === 0 ? (
                   <h5 className="text-center emptyTask">No Doing Task Here!</h5>
                 ) : (
                   <>
-                    {filteredRemainingTasks.map((todo, index) => {
+                    {filteredDoingTasks.map((todo, index) => {
                       return (
                         <TodoItem
                           index={index}
                           todo={todo}
-                          key={`todo-${todo.sno}`}
+                          key={`todo-${todo._id}`}
                           onDelete={props.onDelete}
                           onEdit={props.onEdit}
-                          onChecked={props.onChecked}
                           HoveredOnBox={setIsHoveredOnBox}
                           DescriptionState={open}
                         />
@@ -148,7 +146,7 @@ const Todos = (props) => {
         <div className="col-xl-4 d-flex flex-column my-4 ">
           <p className="subHeading fw-bold text-center ">
             Done:
-            <span className="count"> {filteredCompletedTasks.length}</span>
+            <span className="count"> {filteredDoneTasks.length}</span>
           </p>
           <Droppable droppableId={`completed`}>
             {(provided, snapshot) => (
@@ -159,19 +157,18 @@ const Todos = (props) => {
                   snapshot.isDraggingOver ? "dragTaskContainer" : ""
                 } row row-cols-md-2 row-cols-xl-1 overflow-auto tasksContainer `}
               >
-                {filteredCompletedTasks.length === 0 ? (
+                {filteredDoneTasks.length === 0 ? (
                   <h5 className="text-center emptyTask">No Done Task Here!</h5>
                 ) : (
                   <>
-                    {filteredCompletedTasks.map((todo, index) => {
+                    {filteredDoneTasks.map((todo, index) => {
                       return (
                         <TodoItem
                           index={index}
                           todo={todo}
-                          key={`todo-${todo.sno}`}
+                          key={`todo-${todo._id}`}
                           onDelete={props.onDelete}
                           onEdit={props.onEdit}
-                          onChecked={props.onChecked}
                           HoveredOnBox={setIsHoveredOnBox}
                           DescriptionState={open}
                         />

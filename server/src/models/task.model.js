@@ -8,7 +8,6 @@ const taskSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: [true, "Please Provide the task description"],
     },
     status: {
       type: String,

@@ -5,74 +5,74 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Todos from "./components/Todos";
-import { v4 as uuidv4 } from "uuid";
 import { DragDropContext } from "react-beautiful-dnd";
+import axios from "axios";
 
 function App() {
   const [filterText, setFilterText] = useState("");
 
   const [todoTasks, setTodoTasks] = useState([]);
-  const [remainingTasks, setRemainingTasks] = useState([]);
-  const [completedTasks, setCompletedTasks] = useState([]);
+  const [doingTasks, setDoingTasks] = useState([]);
+  const [doneTasks, setDoneTasks] = useState([]);
 
   useEffect(() => {
-    let storedTodoTasks = localStorage.getItem("todoTasks");
-    if (storedTodoTasks) {
-      storedTodoTasks = JSON.parse(storedTodoTasks);
-      setTodoTasks(storedTodoTasks);
-    }
-    let storedRemainingTasks = localStorage.getItem("remainingTasks");
-    if (storedRemainingTasks) {
-      storedRemainingTasks = JSON.parse(storedRemainingTasks);
-      setRemainingTasks(storedRemainingTasks);
-    }
+    async function getTaskFromDataBase() {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/tasks/`);
+        const allTasks = response.data.tasks;
 
-    let storedCompletedTasks = localStorage.getItem("completedTasks");
-    if (storedCompletedTasks) {
-      storedCompletedTasks = JSON.parse(storedCompletedTasks);
-      setCompletedTasks(storedCompletedTasks);
+        const todoTask = allTasks.filter((task) => task.status === "TODO");
+        const doingTasks = allTasks.filter((task) => task.status === "DOING");
+        const doneTasks = allTasks.filter((task) => task.status === "DONE");
+
+        // console.log(allTasks[0]._id);
+        setTodoTasks(todoTask);
+        console.log(todoTask);
+
+        setDoingTasks(doingTasks);
+        console.log(doingTasks);
+
+        setDoneTasks(doneTasks);
+        console.log(doneTasks);
+      } catch (error) {
+        console.log("Error get tasks: ", error);
+        toast.error("Failed to get tasks", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
     }
+    getTaskFromDataBase();
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("todoTasks", JSON.stringify(todoTasks));
-    localStorage.setItem("remainingTasks", JSON.stringify(remainingTasks));
-    localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
-  }, [todoTasks, remainingTasks, completedTasks]);
-
   // Function for adding todo
-  const addTodo = (title, desc) => {
+  const addTodo = async (title, description) => {
     const myTodo = {
-      sno: uuidv4(),
       title,
-      desc,
-      status: "TODO",
-      done: false,
-      todoTime: new Intl.DateTimeFormat(navigator.language, {
-        hour: "numeric",
-        minute: "numeric",
-      }).format(new Date()),
-      todoDate: new Intl.DateTimeFormat(navigator.language, {
-        // weekday: "short",
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }).format(new Date()),
+      description,
     };
-
-    setTodoTasks([...todoTasks, myTodo]);
-
-    // For Notification Alert
-    toast.success("New Task Added!", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/tasks/create",
+        myTodo
+      );
+      if (response.data.success) {
+        toast.success("New Task Added!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(`${error.response.data.message}`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
   };
 
   // Function for deleting todo
   const onDelete = (todo) => {
     setTodoTasks(todoTasks.filter((e) => e !== todo));
-    setRemainingTasks(remainingTasks.filter((e) => e !== todo));
-    setCompletedTasks(completedTasks.filter((e) => e !== todo));
+    setDoingTasks(doingTasks.filter((e) => e !== todo));
+    setDoneTasks(doneTasks.filter((e) => e !== todo));
 
     // For Notification Alert
     toast.error("Task Deleted!", {
@@ -95,38 +95,12 @@ function App() {
       }).format(new Date()),
     };
 
-    setRemainingTasks(
-      remainingTasks.map((t) => (t.sno === editTodo.sno ? updatedTodo : t))
+    setDoingTasks(
+      doingTasks.map((t) => (t._id === editTodo._id ? updatedTodo : t))
     );
     setTodoTasks(
-      todoTasks.map((t) => (t.sno === editTodo.sno ? updatedTodo : t))
+      todoTasks.map((t) => (t._id === editTodo._id ? updatedTodo : t))
     );
-  }
-
-  // For checked task
-  function onChecked(checkTodo) {
-    const updatedTodo = {
-      ...checkTodo,
-    };
-    let updatedRemainingTasks = [...remainingTasks];
-    let updatedCompletedTasks = [...completedTasks];
-
-    if (updatedTodo.done) {
-      // Task is completed
-      updatedRemainingTasks = updatedRemainingTasks.filter(
-        (task) => task.sno !== checkTodo.sno
-      );
-      updatedCompletedTasks = [...updatedCompletedTasks, updatedTodo];
-    } else {
-      // Task is not completed
-      updatedCompletedTasks = updatedCompletedTasks.filter(
-        (task) => task.sno !== checkTodo.sno
-      );
-      updatedRemainingTasks = [...updatedRemainingTasks, updatedTodo];
-    }
-
-    setRemainingTasks(updatedRemainingTasks);
-    setCompletedTasks(updatedCompletedTasks);
   }
 
   const handleDragEnd = (result) => {
@@ -148,17 +122,16 @@ function App() {
       sourceStatus === "todo"
         ? todoTasks
         : sourceStatus === "remain"
-        ? remainingTasks
-        : completedTasks;
+        ? doingTasks
+        : doneTasks;
     const destArray =
       destStatus === "todo"
         ? todoTasks
         : destStatus === "remain"
-        ? remainingTasks
-        : completedTasks;
+        ? doingTasks
+        : doneTasks;
 
     const [movedTask] = sourceArray.splice(source.index, 1);
-    movedTask.done = destStatus === "completed";
 
     movedTask.status =
       destStatus === "todo"
@@ -170,8 +143,12 @@ function App() {
     destArray.splice(destination.index, 0, movedTask);
 
     setTodoTasks([...todoTasks]);
-    setRemainingTasks([...remainingTasks]);
-    setCompletedTasks([...completedTasks]);
+    setDoingTasks([...doingTasks]);
+    setDoneTasks([...doneTasks]);
+
+    toast.success("Task status updated successfully!", {
+      position: toast.POSITION.TOP_RIGHT,
+    });
   };
 
   // To render on web page
@@ -186,11 +163,10 @@ function App() {
         />
         <Todos
           todoTasks={todoTasks}
-          remainingTasks={remainingTasks}
-          completedTasks={completedTasks}
+          doingTasks={doingTasks}
+          doneTasks={doneTasks}
           onDelete={onDelete}
           onEdit={onEdit}
-          onChecked={onChecked}
           filterText={filterText}
         />
         <ToastContainer autoClose={1000} />
