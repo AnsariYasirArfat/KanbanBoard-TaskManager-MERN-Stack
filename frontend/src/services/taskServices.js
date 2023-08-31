@@ -22,16 +22,11 @@ export const getTaskFromDataBase = async (
     const doingTasks = allTasks.filter((task) => task.status === "DOING");
     const doneTasks = allTasks.filter((task) => task.status === "DONE");
 
-    // console.log(allTasks[0]._id);
     setTodoTasks(todoTask);
-    console.log(todoTask);
 
     setDoingTasks(doingTasks);
-    console.log(doingTasks);
 
     setDoneTasks(doneTasks);
-    console.log(doneTasks);
-    // return response.data;
   } catch (error) {
     throw error.response.data;
   }

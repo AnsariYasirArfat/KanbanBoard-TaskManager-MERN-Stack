@@ -241,18 +241,6 @@ input[type="radio"]:checked + .radio-custom:before {
 }
 
 /* TodoItem component style */
-input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-input[type="checkbox"]:checked {
-  accent-color: #e9f08e;
-  width: 15px;
-  height: 15px;
-}
 .dragTaskBox {
   scale: 1.15;
 }
@@ -267,6 +255,12 @@ input[type="checkbox"]:checked {
 .taskBoxHeight {
   height: 280px;
 }
+
+.taskChecked {
+  text-decoration: 2px line-through #051a26;
+  color: #4f9693;
+}
+
 .doneTaskBox {
   opacity: 0.7;
 }
@@ -277,7 +271,7 @@ input[type="checkbox"]:checked {
   box-shadow: 2px 2px 20px #e9f08e;
 }
 .blur:hover .taskBox:not(:hover) {
-  opacity: 0.4;
+  opacity: 0.5;
 }
 .saveHeading {
   font-size: 1rem;
@@ -346,11 +340,6 @@ input[type="checkbox"]:checked {
   color: #447ca4;
   font-weight: 600;
   font-size: 0.7rem;
-}
-
-.taskChecked {
-  text-decoration: 2px line-through #051a26;
-  color: #4f9693;
 }
 
 .editDeleteButton:hover {

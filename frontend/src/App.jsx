@@ -6,7 +6,6 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Todos from "./components/Todos";
 import { DragDropContext } from "react-beautiful-dnd";
-import axios from "axios";
 import {
   createTask,
   deleteTask,
@@ -52,7 +51,6 @@ function App() {
         });
       }
     } catch (error) {
-      console.error(error);
       toast.error(`${error.response.message}`, {
         position: toast.POSITION.TOP_RIGHT,
       });
@@ -72,7 +70,6 @@ function App() {
         });
       }
     } catch (error) {
-      console.error(error);
       toast.error(`${error.response.message}`, {
         position: toast.POSITION.TOP_RIGHT,
       });
@@ -95,7 +92,6 @@ function App() {
         });
       }
     } catch (error) {
-      console.error(error);
       toast.error(`${error.response.message}`, {
         position: toast.POSITION.TOP_RIGHT,
       });
@@ -104,7 +100,6 @@ function App() {
 
   const handleDragEnd = async (result) => {
     const { destination, source } = result;
-    console.log(result);
     if (!destination) {
       return;
     }
@@ -148,13 +143,11 @@ function App() {
         setTodoTasks([...todoTasks]);
         setDoingTasks([...doingTasks]);
         setDoneTasks([...doneTasks]);
-        // await getTaskFromDataBase(setTodoTasks, setDoingTasks, setDoneTasks);
         toast.success("Task status updated successfully!", {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
     } catch (error) {
-      console.error(error);
       toast.error(`${error.response.message}`, {
         position: toast.POSITION.TOP_RIGHT,
       });

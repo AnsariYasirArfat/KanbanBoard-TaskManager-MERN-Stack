@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Collapse from "react-bootstrap/Collapse";
 import { Draggable } from "react-beautiful-dnd";
@@ -27,14 +26,13 @@ const Todoitem = ({
     title: todo.title,
     description: todo.description,
   });
-  // Alert after Editting task
+
   const onSave = (e) => {
     e.preventDefault();
     onEdit(editedTodo);
     setEditing(false);
   };
 
-  // For condition Editting Todos
   if (editing) {
     todoItem = (
       <>

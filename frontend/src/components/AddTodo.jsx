@@ -5,14 +5,11 @@ import AlertModal from "./AlertModal";
 import addTaskImg from "../assets/addTask.png";
 
 const AddTodo = ({ addTodo }) => {
-  // For Form Opening
   const [setshowForm, setShowForm] = useState(false);
   const openForm = () => setShowForm(true);
 
-  // For Model
   const [showModal, setShowModal] = useState(false);
 
-  // Title-Description & First capital letter
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
 
@@ -25,7 +22,6 @@ const AddTodo = ({ addTodo }) => {
     setIsHoveredOnButton(false);
   };
 
-  // On form submition
   const submit = (e) => {
     e.preventDefault();
     if (title) {
