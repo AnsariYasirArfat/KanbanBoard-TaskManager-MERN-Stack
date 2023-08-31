@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8000/api";
+const API_BASE_URL = "https://taskmanagement-webapp.onrender.com";
 
 /**********************************************************
  * @GET_TASKS
@@ -16,7 +16,7 @@ export const getTaskFromDataBase = async (
   setDoneTasks
 ) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/tasks`);
+    const response = await axios.get(`${API_BASE_URL}/api/tasks`);
     const allTasks = response.data.tasks;
     const todoTask = allTasks.filter((task) => task.status === "TODO");
     const doingTasks = allTasks.filter((task) => task.status === "DOING");
@@ -45,7 +45,10 @@ export const getTaskFromDataBase = async (
  **********************************************************/
 export const createTask = async (taskData) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/tasks/create`, taskData);
+    const response = await axios.post(
+      `${API_BASE_URL}/api/tasks/create`,
+      taskData
+    );
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -60,7 +63,7 @@ export const createTask = async (taskData) => {
  **********************************************************/
 export const deleteTask = async (taskId) => {
   try {
-    const response = await axios.delete(`${API_BASE_URL}/tasks/${taskId}`);
+    const response = await axios.delete(`${API_BASE_URL}/api/tasks/${taskId}`);
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -76,7 +79,7 @@ export const deleteTask = async (taskId) => {
 export const updatedTask = async (updateTask) => {
   try {
     const response = await axios.put(
-      `${API_BASE_URL}/tasks/${updateTask._id}`,
+      `${API_BASE_URL}/api/tasks/${updateTask._id}`,
       updateTask
     );
 
@@ -95,7 +98,7 @@ export const updatedTask = async (updateTask) => {
 export const updateTaskStatus = async (Task) => {
   try {
     const response = await axios.put(
-      `${API_BASE_URL}/tasks/${Task._id}/status`,
+      `${API_BASE_URL}/api/tasks/${Task._id}/status`,
       { status: Task.status }
     );
     return response.data;
