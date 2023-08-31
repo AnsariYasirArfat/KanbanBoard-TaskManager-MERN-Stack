@@ -64,7 +64,7 @@ const Todoitem = ({
             <div className="p-1 mx-4 mb-3 editTitleInput">
               <input
                 maxLength="50"
-                className={`text p-1 mb-0 text-capitalize`}
+                className={`text p-1 mb-0`}
                 required
                 value={editedTodo.title}
                 placeholder="No Title"
@@ -78,7 +78,7 @@ const Todoitem = ({
             </div>
             <div className="editDescSection mx-4 p-1">
               <textarea
-                className={`editDescInput p-1 text-capitalize`}
+                className={`editDescInput p-1`}
                 value={editedTodo.description}
                 placeholder="No Description"
                 onChange={(e) => {

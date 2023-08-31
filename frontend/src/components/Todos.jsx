@@ -68,7 +68,7 @@ const Todos = (props) => {
             To Do:
             <span className="count"> {filteredTodoTasks.length}</span>
           </p>
-          <Droppable droppableId={`todo`}>
+          <Droppable droppableId={`TODO`}>
             {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
@@ -109,7 +109,7 @@ const Todos = (props) => {
             Doing:
             <span className="count"> {filteredDoingTasks.length}</span>
           </p>
-          <Droppable droppableId={`remain`}>
+          <Droppable droppableId={`DOING`}>
             {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
@@ -148,7 +148,7 @@ const Todos = (props) => {
             Done:
             <span className="count"> {filteredDoneTasks.length}</span>
           </p>
-          <Droppable droppableId={`completed`}>
+          <Droppable droppableId={`DONE`}>
             {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}

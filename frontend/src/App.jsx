@@ -7,6 +7,13 @@ import Footer from "./components/Footer";
 import Todos from "./components/Todos";
 import { DragDropContext } from "react-beautiful-dnd";
 import axios from "axios";
+import {
+  createTask,
+  deleteTask,
+  getTaskFromDataBase,
+  updateTaskStatus,
+  updatedTask,
+} from "./services/taskServices";
 
 function App() {
   const [filterText, setFilterText] = useState("");
@@ -16,102 +23,72 @@ function App() {
   const [doneTasks, setDoneTasks] = useState([]);
 
   useEffect(() => {
-    async function getTaskFromDataBase() {
+    async function getTasks() {
       try {
-        const response = await axios.get(`http://localhost:8000/api/tasks/`);
-        const allTasks = response.data.tasks;
-
-        const todoTask = allTasks.filter((task) => task.status === "TODO");
-        const doingTasks = allTasks.filter((task) => task.status === "DOING");
-        const doneTasks = allTasks.filter((task) => task.status === "DONE");
-
-        // console.log(allTasks[0]._id);
-        setTodoTasks(todoTask);
-        console.log(todoTask);
-
-        setDoingTasks(doingTasks);
-        console.log(doingTasks);
-
-        setDoneTasks(doneTasks);
-        console.log(doneTasks);
+        await getTaskFromDataBase(setTodoTasks, setDoingTasks, setDoneTasks);
       } catch (error) {
-        console.log("Error get tasks: ", error);
         toast.error("Failed to get tasks", {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
     }
-    getTaskFromDataBase();
+    getTasks();
   }, []);
 
-  // Function for adding todo
+  // Function for adding task
   const addTodo = async (title, description) => {
-    const myTodo = {
+    const taskData = {
       title,
       description,
     };
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/tasks/create",
-        myTodo
-      );
-      if (response.data.success) {
+      const response = await createTask(taskData);
+
+      if (response.success) {
+        await getTaskFromDataBase(setTodoTasks, setDoingTasks, setDoneTasks);
+
         toast.success("New Task Added!", {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
     } catch (error) {
       console.error(error);
-      toast.error(`${error.response.data.message}`, {
+      toast.error(`${error.response.message}`, {
         position: toast.POSITION.TOP_RIGHT,
       });
     }
   };
 
-  // Function for deleting todo
-  const onDelete = async (todo) => {
+  // Function for Deleting task
+  const onDelete = async (task) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8000/api/tasks/${todo._id}`
-      );
-      if (response.data.success) {
-        setTodoTasks(todoTasks.filter((e) => e !== todo));
-        setDoingTasks(doingTasks.filter((e) => e !== todo));
-        setDoneTasks(doneTasks.filter((e) => e !== todo));
+      const response = await deleteTask(task._id);
+      if (response.success) {
+        await getTaskFromDataBase(setTodoTasks, setDoingTasks, setDoneTasks);
 
         // For Notification Alert
-        toast.error("Task Deleted!", {
+        toast.error(`${response.message}`, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
     } catch (error) {
       console.error(error);
-      toast.error(`${error.response.data.message}`, {
+      toast.error(`${error.response.message}`, {
         position: toast.POSITION.TOP_RIGHT,
       });
     }
   };
 
-  // Function for editing todo
-  const onEdit = async (editTodo) => {
-    const updatedTodo = {
-      ...editTodo,
+  // Function for editing task
+  const onEdit = async (taskToUpdate) => {
+    const updateTask = {
+      ...taskToUpdate,
     };
-    console.log(editTodo);
     try {
-      const response = await axios.put(
-        `http://localhost:8000/api/tasks/${editTodo._id}`,
-        updatedTodo
-      );
+      const response = await updatedTask(updateTask);
 
-      if (response.data.success) {
-        // Update local state
-        setDoingTasks(
-          doingTasks.map((t) => (t._id === editTodo._id ? updatedTodo : t))
-        );
-        setTodoTasks(
-          todoTasks.map((t) => (t._id === editTodo._id ? updatedTodo : t))
-        );
+      if (response.success) {
+        await getTaskFromDataBase(setTodoTasks, setDoingTasks, setDoneTasks);
 
         toast.info("Task Updated!", {
           position: toast.POSITION.TOP_RIGHT,
@@ -119,13 +96,13 @@ function App() {
       }
     } catch (error) {
       console.error(error);
-      toast.error(`${error.response.data.message}`, {
+      toast.error(`${error.response.message}`, {
         position: toast.POSITION.TOP_RIGHT,
       });
     }
   };
 
-  const handleDragEnd = (result) => {
+  const handleDragEnd = async (result) => {
     const { destination, source } = result;
     console.log(result);
     if (!destination) {
@@ -141,36 +118,47 @@ function App() {
     const destStatus = destination.droppableId;
 
     const sourceArray =
-      sourceStatus === "todo"
+      sourceStatus === "TODO"
         ? todoTasks
-        : sourceStatus === "remain"
+        : sourceStatus === "DOING"
         ? doingTasks
         : doneTasks;
     const destArray =
-      destStatus === "todo"
+      destStatus === "TODO"
         ? todoTasks
-        : destStatus === "remain"
+        : destStatus === "DOING"
         ? doingTasks
         : doneTasks;
 
     const [movedTask] = sourceArray.splice(source.index, 1);
 
     movedTask.status =
-      destStatus === "todo"
+      destStatus === "TODO"
         ? "TODO"
-        : destStatus === "remain"
+        : destStatus === "DOING"
         ? "DOING"
         : "DONE";
 
     destArray.splice(destination.index, 0, movedTask);
 
-    setTodoTasks([...todoTasks]);
-    setDoingTasks([...doingTasks]);
-    setDoneTasks([...doneTasks]);
+    try {
+      const response = await updateTaskStatus(movedTask);
 
-    toast.success("Task status updated successfully!", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
+      if (response.success) {
+        setTodoTasks([...todoTasks]);
+        setDoingTasks([...doingTasks]);
+        setDoneTasks([...doneTasks]);
+        // await getTaskFromDataBase(setTodoTasks, setDoingTasks, setDoneTasks);
+        toast.success("Task status updated successfully!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(`${error.response.message}`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
   };
 
   // To render on web page

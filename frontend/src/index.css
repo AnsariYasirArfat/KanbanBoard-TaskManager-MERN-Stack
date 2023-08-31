@@ -186,6 +186,7 @@ body {
   margin: 1px;
   border: solid 2px #447ca4;
   border-radius: 10px;
+  max-height: 940px;
 }
 
 .tasksContainer::-webkit-scrollbar {
@@ -236,6 +237,7 @@ input[type="radio"]:checked + .radio-custom:before {
 .emptyTask {
   padding: 140px 0;
   color: #e9f08e;
+  height: 940px;
 }
 
 /* TodoItem component style */
@@ -283,9 +285,8 @@ input[type="checkbox"]:checked {
 }
 
 .taskTitle {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #c8f1eb;
-  width: 90%;
   font-weight: 600;
   letter-spacing: 0.05em;
 }
